@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./styles.css";
 
 export function Square(props: any) {
-	const { row, col, number } = props;
+	const { row, col, number, onNumberChange } = props;
 	let inputRef: any;
 
 	useEffect(() => {
@@ -11,13 +11,13 @@ export function Square(props: any) {
 
 	const handleNumberChange = (event: any) => {
 		const number = parseInt(event.target.value);
-		console.log(number);
 
-		if (!isNaN(number)) {
-			const lastDigit = number % 10;
-			inputRef.value = lastDigit === 0 ? "" : lastDigit;
-		} else {
+		if (isNaN(number)) {
 			inputRef.value = "";
+		} else {
+			const lastDigit = number % 10;
+			onNumberChange(lastDigit);
+			inputRef.value = lastDigit === 0 ? "" : lastDigit;
 		}
 	};
 

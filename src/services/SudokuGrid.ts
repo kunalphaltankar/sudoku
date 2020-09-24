@@ -287,7 +287,7 @@ export default class SudokuGrid {
 	static unsolvedGrid() {
 		const solution = SudokuGrid.generateGrid();
 		const grid = JSON.parse(JSON.stringify(solution));
-		for (let i = 0; i < 35; i++) {
+		for (let i = 0; i < 5; i++) {
 			grid[this.getRandomIndex()][this.getRandomIndex()] = 0;
 		}
 		return {
