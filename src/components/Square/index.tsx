@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./styles.css";
 
 export function Square(props: any) {
-	const { row, col, number, onNumberChange } = props;
+	const { row, col, number, onNumberChange, backgroundColor } = props;
 	let inputRef: any;
 
 	useEffect(() => {
@@ -10,14 +10,15 @@ export function Square(props: any) {
 	});
 
 	const handleNumberChange = (event: any) => {
-		const number = parseInt(event.target.value);
+		const numberFound = (event.target.value + "").match(/\d+$/);
 
-		if (isNaN(number)) {
-			inputRef.value = "";
-		} else {
+		if (numberFound) {
+			const number = parseInt(numberFound[0]);
 			const lastDigit = number % 10;
 			onNumberChange(lastDigit);
 			inputRef.value = lastDigit === 0 ? "" : lastDigit;
+		} else {
+			inputRef.value = "";
 		}
 	};
 
@@ -25,10 +26,10 @@ export function Square(props: any) {
 		<div
 			className="square"
 			style={{
-				borderLeftWidth: row === 1 ? 4 : 1,
-				borderRightWidth: row % 3 === 0 ? 4 : 1,
-				borderTopWidth: col === 1 ? 4 : 1,
-				borderBottomWidth: col % 3 === 0 ? 4 : 1,
+				borderLeftWidth: row === 1 ? 2 : 1,
+				borderRightWidth: row % 3 === 0 ? 2 : 1,
+				borderTopWidth: col === 1 ? 2 : 1,
+				borderBottomWidth: col % 3 === 0 ? 2 : 1,
 			}}
 		>
 			<input
@@ -36,6 +37,13 @@ export function Square(props: any) {
 				className="number-input"
 				onChange={handleNumberChange}
 				ref={(ref) => (inputRef = ref)}
+				style={{ background: backgroundColor }}
+				onFocus={() => {
+					inputRef.style.background = "#f0dc82";
+				}}
+				onBlur={() => {
+					inputRef.style.background = "white";
+				}}
 			/>
 		</div>
 	);

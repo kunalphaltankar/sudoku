@@ -1,46 +1,123 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./App.css";
 import { Grid } from "./components/Grid";
 import SudokuGrid from "./services/SudokuGrid";
 
-function App() {
-	const gridData = SudokuGrid.unsolvedGrid();
-	const [grid, setGrid] = useState(gridData.grid);
-	const [solution, setSolution] = useState(gridData.solution);
+class App extends React.Component {
+	state = {
+		grid: [],
+		solution: [],
+		level: "easy",
+		doCheck: false,
+	};
 
-	const onCheck = () => {
+	componentDidMount() {
+		const gridData = SudokuGrid.unsolvedGrid("easy");
+		this.setState({
+			grid: gridData.grid,
+			solution: gridData.solution,
+			doCheck: false,
+		});
+	}
+
+	generateNewGrid = () => {
+		const { level } = this.state;
+		console.log(level);
+		const gridData = SudokuGrid.unsolvedGrid(level);
+		this.setState({
+			grid: gridData.grid,
+			solution: gridData.solution,
+			doCheck: false,
+		});
+	};
+
+	onCheck = () => {
+		const { grid, solution } = this.state;
+
 		for (let i = 0; i < 9; i++) {
 			for (let j = 0; j < 9; j++) {
 				if (grid[i][j] !== solution[i][j]) {
-					alert("Wrong");
+					this.setState({ doCheck: true });
 					return;
 				}
 			}
 		}
-
-		const gridData = SudokuGrid.unsolvedGrid();
-		setGrid(gridData.grid);
-		setSolution(gridData.solution);
+		this.generateNewGrid();
 		alert("Correct");
 	};
 
-	return (
-		<div className="App">
-			<div style={{ display: "flex" }}>
-				<Grid
-					grid={grid}
-					solution={solution}
-					onGridChange={(grid) => {
-						setGrid(grid);
-					}}
-				/>
-			</div>
+	onSolve = () => {
+		this.setState({ grid: this.state.solution });
+	};
 
-			<button className="button green" onClick={onCheck}>
-				Check
-			</button>
-		</div>
-	);
+	render() {
+		const { grid, solution, doCheck } = this.state;
+		return (
+			<div className="App">
+				<div className="header">
+					<h1>Sudoku</h1>
+				</div>
+
+				<div style={{ display: "flex" }}>
+					<Grid
+						grid={grid}
+						solution={solution}
+						onGridChange={(grid) => {
+							this.setState({ grid });
+						}}
+						doCheck={doCheck}
+						unsetDoCheck={() => {
+							this.setState({ doCheck: false });
+						}}
+					/>
+				</div>
+
+				<div className="button-container">
+					<button
+						className="level-button"
+						onClick={() => {
+							this.setState({ level: "easy" }, () => {
+								this.generateNewGrid();
+							});
+						}}
+					>
+						Easy
+					</button>
+
+					<button
+						className="level-button"
+						onClick={() => {
+							this.setState({ level: "medium" }, () => {
+								this.generateNewGrid();
+							});
+						}}
+					>
+						Medium
+					</button>
+
+					<button
+						className="level-button"
+						onClick={() => {
+							this.setState({ level: "hard" }, () => {
+								this.generateNewGrid();
+							});
+						}}
+					>
+						Hard
+					</button>
+				</div>
+
+				<div className="button-container">
+					<button className="button" onClick={this.onCheck}>
+						Check
+					</button>
+					<button className="button" onClick={this.onSolve}>
+						Solve
+					</button>
+				</div>
+			</div>
+		);
+	}
 }
 
 export default App;

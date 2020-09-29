@@ -2,14 +2,22 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin-top: 20px;
 	min-width: 500px;
+}
+
+.button-container {
+	width: 500px;
+	margin-top: 10px;
+	display: flex;
+	justify-content: space-between;
 }
 
 .button {
 	align-self: center;
-	border: none;
-	color: white;
+	border-radius: 5px;
+	border-color: #444;
+	color: black;
+	background-color: white;
 	padding: 15px 32px;
 	text-align: center;
 	text-decoration: none;
@@ -21,3 +29,14 @@
 .green {
 	background-color: #4caf50;
 } /* Green */
+
+.level-button {
+	color: black;
+	background-color: white;
+	padding: 15px 32px;
+	margin: 4px 2px;
+	border: none;
+	font-size: 16px;
+	text-align: center;
+	cursor: pointer;
+}

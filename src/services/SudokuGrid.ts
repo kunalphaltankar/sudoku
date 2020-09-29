@@ -269,7 +269,7 @@ export default class SudokuGrid {
 		}
 
 		if (!SudokuGrid.isPerfect(grid)) {
-			throw "ERROR: Imperfect grid generated.";
+			throw new Error("ERROR: Imperfect grid generated.");
 		}
 
 		let Grid2D = [];
@@ -284,10 +284,19 @@ export default class SudokuGrid {
 		return Math.floor(Math.random() * 10) % 9;
 	};
 
-	static unsolvedGrid() {
+	static unsolvedGrid(level: string) {
+		let emptyBoxCount = 27;
+		switch (level) {
+			case "medium":
+				emptyBoxCount = 36;
+				break;
+			case "hard":
+				emptyBoxCount = 45;
+				break;
+		}
 		const solution = SudokuGrid.generateGrid();
 		const grid = JSON.parse(JSON.stringify(solution));
-		for (let i = 0; i < 5; i++) {
+		for (let i = 0; i < emptyBoxCount; i++) {
 			grid[this.getRandomIndex()][this.getRandomIndex()] = 0;
 		}
 		return {
